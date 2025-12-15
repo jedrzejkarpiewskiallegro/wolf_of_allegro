@@ -9,7 +9,7 @@ INPUT DATA:
 OUTPUT FORMAT: You MUST respond with a SINGLE INTEGER representing your bid.
 
 REASONING STRATEGY (Chain of Thought):
-Execute the following 5 steps sequentially. Do not jump to valuation if Step 1 fails.
+Execute the following steps sequentially. Do not skip steps.
 
 Step 1: THE "IRON GATES" (Immediate Rejection Checks)
 Evaluate these conditions FIRST. If ANY are true, STOP and return 0.
@@ -17,17 +17,22 @@ Evaluate these conditions FIRST. If ANY are true, STOP and return 0.
 2. DO WE HAVE IT? Check if `game_state.CurrentRound.Item.Name` exists in `YourTeam.Acquired`. If YES -> Return 0.
 3. ARE WE WINNING? Check if `game_state.CurrentRound.CurrentHighestBid.TeamName` == `YourTeam.Name`. If YES -> Return 0. (Do not bid against yourself).
 
-Step 2: CONTEXTUAL ANALYSIS (Scarcity Check)
-(Only proceed if Step 1 passed)
+Step 2: EARLY BIRD ENTRY (Low Cost Opening)
+Check `game_state.CurrentRound.RoundIteration`.
+1. If `RoundIteration` == 1:
+   - Return 1. (Always start bidding at the minimum. Since all teams act simultaneously, the starting bid is 0. Secure your entry at the lowest price).
+
+Step 3: CONTEXTUAL ANALYSIS (Scarcity Check)
+(Only proceed if RoundIteration > 1)
 1. Identify `TargetItem` name.
 2. Calculate `RemainingSupply` = (Count in `all_items`) MINUS (Count in `YourTeam.Acquired` + ALL `OpponentTeams.Acquired`).
    *Note: The item currently on auction is included in RemainingSupply.*
 
-Step 3: CALCULATE VALUATION (Fair Share)
+Step 4: CALCULATE VALUATION (Fair Share)
 1. `items_needed` = 10 - (count of items in `YourTeam.Acquired`).
 2. `base_cap` = `YourTeam.Budget` / `items_needed`.
 
-Step 4: APPLY STRATEGIC MULTIPLIERS (Patience Logic)
+Step 5: APPLY STRATEGIC MULTIPLIERS (Patience Logic)
 1. Define `limit` based on `RemainingSupply`:
    - **PANIC (RemainingSupply == 1):** Last chance. Set `limit` = `YourTeam.Budget`.
    - **URGENT (RemainingSupply == 2):** Risk of loss. Set `limit` = `base_cap` * 1.5.
@@ -36,7 +41,7 @@ Step 4: APPLY STRATEGIC MULTIPLIERS (Patience Logic)
    - If `Item.Quality` > 90: `limit` = `limit` * 1.2.
    - If `Item.Quality` < 50: `limit` = `limit` * 0.6.
 
-Step 5: SAFETY HARD CAPS & FINAL BID
+Step 6: SAFETY HARD CAPS & FINAL BID
 1. **Safety Rule:** If `items_needed` > 1 AND `RemainingSupply` > 1:
    - Cap `limit` at 45% of `YourTeam.Budget`.
 2. Determine Bid:
