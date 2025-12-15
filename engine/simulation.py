@@ -215,6 +215,25 @@ class AuctionEngine:
                     f"by '{iteration_start_high_bidder if iteration_start_high_bidder else 'None'}'"
                 )
                 
+                # Early exit: if no team can bid higher, end auction
+                if iteration_start_high_bid > 0:
+                    teams_that_can_outbid = [t for t in self.teams if t.state.budget > iteration_start_high_bid]
+                    if not teams_that_can_outbid:
+                        logger.info(
+                            f"No team can bid higher than {iteration_start_high_bid}. "
+                            f"'{iteration_start_high_bidder}' wins '{item.name}'."
+                        )
+                        winner = next(t for t in self.teams if t.name == iteration_start_high_bidder)
+                        winner.win_item(item, iteration_start_high_bid)
+                        
+                        return AuctionResult(
+                            item=item,
+                            winning_team=iteration_start_high_bidder,
+                            winning_bid=iteration_start_high_bid,
+                            all_bids=all_bids,
+                            iterations=iteration
+                        )
+                
                 # Check for ties at the highest bid amount
                 tied_bids = [b for b in iteration_bids if b.amount == max_bid.amount]
                 
