@@ -160,9 +160,10 @@ class AuctionEngine:
         prev_highest_team: str | None = None
         stable_iterations: int = 0  # How many iterations the highest bid stayed the same
         
-        # Track current highest bid for game state
-        current_high_bid: int = 0
-        current_high_bidder: str | None = None
+        # Track current highest bid for game state (from END of previous iteration)
+        # This is what all teams see at the START of each iteration
+        iteration_start_high_bid: int = 0
+        iteration_start_high_bidder: str | None = None
         
         for iteration in range(1, self.config.max_iterations + 1):
             logger.debug(f"Item '{item.name}' - Iteration {iteration}")
@@ -173,15 +174,19 @@ class AuctionEngine:
             
             iteration_bids: list[Bid] = []
             
+            # IMPORTANT: All teams see the SAME game_state within one iteration
+            # This simulates simultaneous bidding - state is frozen from end of previous iteration
+            bids_history_snapshot = all_bids.copy()
+            
             for team in shuffled_teams:
                 game_state = self._build_game_state(
                     team=team, 
                     current_item=item, 
                     iteration=iteration,
                     round_number=round_number,
-                    current_highest_bid=current_high_bid,
-                    current_highest_bidder=current_high_bidder,
-                    bids_history=all_bids.copy()
+                    current_highest_bid=iteration_start_high_bid,
+                    current_highest_bidder=iteration_start_high_bidder,
+                    bids_history=bids_history_snapshot  # Same snapshot for all teams
                 )
                 bid_amount = team.get_bid(game_state)
                 
@@ -192,15 +197,17 @@ class AuctionEngine:
                 )
                 iteration_bids.append(bid)
                 all_bids.append(bid)
-                
-                # Update current highest bid if this bid is higher
-                if bid_amount > current_high_bid:
-                    current_high_bid = bid_amount
-                    current_high_bidder = team.name
             
-            # Find highest bid this iteration
+            # After ALL teams have bid, find the highest bid from THIS iteration
             if iteration_bids:
                 max_bid = max(iteration_bids, key=lambda b: b.amount)
+                
+                # Update state for NEXT iteration (all teams will see this)
+                if max_bid.amount > iteration_start_high_bid:
+                    iteration_start_high_bid = max_bid.amount
+                    # In case of tie, first in shuffle order wins
+                    tied_bids = [b for b in iteration_bids if b.amount == max_bid.amount]
+                    iteration_start_high_bidder = tied_bids[0].team_name
                 
                 # Check for ties at the highest bid amount
                 tied_bids = [b for b in iteration_bids if b.amount == max_bid.amount]
