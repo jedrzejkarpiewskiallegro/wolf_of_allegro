@@ -134,8 +134,14 @@ class AuctionEngine:
         """
         Run auction for a single item.
         Uses iterative bidding with shuffle for tie-breaking.
+        Auction ends when highest bid stays unchanged for 2 consecutive iterations.
         """
         all_bids: list[Bid] = []
+        
+        # Track previous iteration's highest bid for stability check
+        prev_highest_bid: int | None = None
+        prev_highest_team: str | None = None
+        stable_iterations: int = 0  # How many iterations the highest bid stayed the same
         
         for iteration in range(1, self.config.max_iterations + 1):
             logger.debug(f"Item '{item.name}' - Iteration {iteration}")
@@ -162,38 +168,64 @@ class AuctionEngine:
             if iteration_bids:
                 max_bid = max(iteration_bids, key=lambda b: b.amount)
                 
-                # Check for ties
+                # Check for ties at the highest bid amount
                 tied_bids = [b for b in iteration_bids if b.amount == max_bid.amount]
                 
                 if len(tied_bids) == 1:
-                    # Clear winner
-                    winner_name = max_bid.team_name
-                    winning_amount = max_bid.amount
+                    # Single highest bidder this iteration
+                    current_highest_bid = max_bid.amount
+                    current_highest_team = max_bid.team_name
                     
-                    # Award item to winner
-                    winner = next(t for t in self.teams if t.name == winner_name)
-                    if winning_amount > 0:
-                        winner.win_item(item, winning_amount)
-                        
-                        return AuctionResult(
-                            item=item,
-                            winning_team=winner_name,
-                            winning_bid=winning_amount,
-                            all_bids=all_bids,
-                            iterations=iteration
-                        )
+                    # Check if highest bid is stable (same amount and team as previous iteration)
+                    if (current_highest_bid == prev_highest_bid and 
+                        current_highest_team == prev_highest_team):
+                        stable_iterations += 1
                     else:
-                        # All bids are 0, no winner
-                        logger.info(f"All bids for '{item.name}' are 0, no winner")
-                        return AuctionResult(
-                            item=item,
-                            winning_team=None,
-                            winning_bid=0,
-                            all_bids=all_bids,
-                            iterations=iteration
-                        )
+                        stable_iterations = 1  # Reset: new leader or new amount
+                    
+                    logger.debug(
+                        f"Highest bid: {current_highest_bid} by '{current_highest_team}' "
+                        f"(stable for {stable_iterations} iteration(s))"
+                    )
+                    
+                    # Auction ends if stable for 2 iterations
+                    if stable_iterations >= 2:
+                        if current_highest_bid > 0:
+                            winner = next(t for t in self.teams if t.name == current_highest_team)
+                            winner.win_item(item, current_highest_bid)
+                            
+                            logger.info(
+                                f"'{current_highest_team}' wins '{item.name}' "
+                                f"for {current_highest_bid} (stable for 2 iterations)"
+                            )
+                            
+                            return AuctionResult(
+                                item=item,
+                                winning_team=current_highest_team,
+                                winning_bid=current_highest_bid,
+                                all_bids=all_bids,
+                                iterations=iteration
+                            )
+                        else:
+                            # All bids are 0 for 2 iterations, no winner
+                            logger.info(f"All bids for '{item.name}' are 0 for 2 iterations, no winner")
+                            return AuctionResult(
+                                item=item,
+                                winning_team=None,
+                                winning_bid=0,
+                                all_bids=all_bids,
+                                iterations=iteration
+                            )
+                    
+                    # Update tracking for next iteration
+                    prev_highest_bid = current_highest_bid
+                    prev_highest_team = current_highest_team
+                    
                 else:
-                    # Tie - continue to next iteration
+                    # Tie - reset stability counter, continue to next iteration
+                    stable_iterations = 0
+                    prev_highest_bid = max_bid.amount
+                    prev_highest_team = None  # No single leader
                     logger.debug(
                         f"Tie between {[b.team_name for b in tied_bids]} "
                         f"at {max_bid.amount}, continuing..."
