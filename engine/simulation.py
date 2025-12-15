@@ -209,6 +209,12 @@ class AuctionEngine:
                     tied_bids = [b for b in iteration_bids if b.amount == max_bid.amount]
                     iteration_start_high_bidder = tied_bids[0].team_name
                 
+                # Log iteration results
+                logger.info(
+                    f"Iteration {iteration}: Highest bid = {iteration_start_high_bid} "
+                    f"by '{iteration_start_high_bidder if iteration_start_high_bidder else 'None'}'"
+                )
+                
                 # Check for ties at the highest bid amount
                 tied_bids = [b for b in iteration_bids if b.amount == max_bid.amount]
                 

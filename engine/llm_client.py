@@ -22,6 +22,9 @@ class LLMClient:
         self.base_url = base_url.rstrip("/")
         self.model = model
         self.timeout = timeout
+        # Disable httpx debug logging
+        httpx_logger = logging.getLogger("httpx")
+        httpx_logger.setLevel(logging.WARNING)
         self._client = httpx.Client(timeout=timeout)
     
     def chat_completion(
