@@ -4,6 +4,7 @@ Team agent that uses LLM to make bidding decisions.
 
 import json
 import logging
+from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
@@ -11,6 +12,32 @@ from .models import GameState, TeamState, Item, ItemJSON
 from .llm_client import LLMClient
 
 logger = logging.getLogger(__name__)
+
+
+def debug_dump(content: str, filename: str | None = None, subfolder: str = "debug") -> None:
+    """
+    Helper function to dump content to a file for debugging.
+    
+    Args:
+        content: The content to write to file
+        filename: Optional filename. If None, uses timestamp
+        subfolder: Subfolder under project root (default: "debug")
+    """
+    # Create debug directory
+    debug_dir = Path(__file__).parent.parent / subfolder
+    debug_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Generate filename if not provided
+    if filename is None:
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+        filename = f"dump_{timestamp}.txt"
+    
+    # Write to file
+    filepath = debug_dir / filename
+    with open(filepath, "w", encoding="utf-8") as f:
+        f.write(content)
+    
+    logger.debug(f"Debug dump saved to: {filepath}")
 
 
 class Team:
@@ -109,6 +136,9 @@ game_state:
 
 Based on all_items and game_state JSON above, determine your bid.
 Respond with ONLY a single integer (your bid amount). Nothing else."""
+        
+        # Uncomment to debug: dump user_message to file
+        # debug_dump(user_message, filename=f"{self.name}_{game_state.current_item.name}_iter{game_state.current_iteration}.txt")
         
         # Call LLM
         logger.debug(f"Team '{self.name}' requesting bid for item '{game_state.current_item.name}'")

@@ -154,6 +154,7 @@ class AuctionEngine:
         Auction ends when highest bid stays unchanged for 2 consecutive iterations.
         """
         all_bids: list[Bid] = []
+        winning_bids_history: list[Bid] = []  # Only highest bids from each iteration
         
         # Track current highest bid for game state (from END of previous iteration)
         # This is what all teams see at the START of each iteration
@@ -171,7 +172,7 @@ class AuctionEngine:
             
             # IMPORTANT: All teams see the SAME game_state within one iteration
             # This simulates simultaneous bidding - state is frozen from end of previous iteration
-            bids_history_snapshot = all_bids.copy()
+            bids_history_snapshot = winning_bids_history.copy()
             
             for team in shuffled_teams:
                 game_state = self._build_game_state(
@@ -181,7 +182,7 @@ class AuctionEngine:
                     round_number=round_number,
                     current_highest_bid=iteration_start_high_bid,
                     current_highest_bidder=iteration_start_high_bidder,
-                    bids_history=bids_history_snapshot  # Same snapshot for all teams
+                    bids_history=bids_history_snapshot  # Only winning bids from previous iterations
                 )
                 bid_amount = team.get_bid(game_state)
                 
@@ -204,6 +205,14 @@ class AuctionEngine:
                     # In case of tie, first in shuffle order wins
                     tied_bids = [b for b in iteration_bids if b.amount == max_bid.amount]
                     iteration_start_high_bidder = tied_bids[0].team_name
+                    
+                    # Add winning bid to history
+                    winning_bid = Bid(
+                        team_name=iteration_start_high_bidder,
+                        amount=iteration_start_high_bid,
+                        iteration=iteration
+                    )
+                    winning_bids_history.append(winning_bid)
                     
                     # Log iteration results
                     logger.info(
