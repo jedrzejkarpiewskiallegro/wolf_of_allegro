@@ -48,6 +48,10 @@ class AuctionEngine:
         # Initialize teams (budget depends on team count)
         self.teams = self._init_teams()
         
+        # Initialize all_items cache for each team (once at game start)
+        for team in self.teams:
+            team.initialize_items(self.items)
+        
         # Track auction history
         self.auction_history: list[AuctionResult] = []
         
@@ -115,7 +119,16 @@ class AuctionEngine:
         logger.info(f"Initialized {len(teams)} teams: {[t.name for t in teams]}")
         return teams
     
-    def _build_game_state(self, team: Team, current_item: Item, iteration: int) -> GameState:
+    def _build_game_state(
+        self, 
+        team: Team, 
+        current_item: Item, 
+        iteration: int,
+        round_number: int = 1,
+        current_highest_bid: int = 0,
+        current_highest_bidder: str | None = None,
+        bids_history: list[Bid] | None = None
+    ) -> GameState:
         """Build the game state from a specific team's perspective."""
         opponent_states = [
             t.get_state() for t in self.teams if t.name != team.name
@@ -127,10 +140,14 @@ class AuctionEngine:
             opponent_teams=opponent_states,
             remaining_items=[i for i in self.remaining_items if i != current_item],
             auction_history=list(self.auction_history),
-            current_iteration=iteration
+            current_iteration=iteration,
+            round_number=round_number,
+            current_highest_bid=current_highest_bid,
+            current_highest_bidder=current_highest_bidder,
+            bids_history=bids_history or []
         )
     
-    def _run_single_auction(self, item: Item) -> AuctionResult:
+    def _run_single_auction(self, item: Item, round_number: int = 1) -> AuctionResult:
         """
         Run auction for a single item.
         Uses iterative bidding with shuffle for tie-breaking.
@@ -143,6 +160,10 @@ class AuctionEngine:
         prev_highest_team: str | None = None
         stable_iterations: int = 0  # How many iterations the highest bid stayed the same
         
+        # Track current highest bid for game state
+        current_high_bid: int = 0
+        current_high_bidder: str | None = None
+        
         for iteration in range(1, self.config.max_iterations + 1):
             logger.debug(f"Item '{item.name}' - Iteration {iteration}")
             
@@ -153,7 +174,15 @@ class AuctionEngine:
             iteration_bids: list[Bid] = []
             
             for team in shuffled_teams:
-                game_state = self._build_game_state(team, item, iteration)
+                game_state = self._build_game_state(
+                    team=team, 
+                    current_item=item, 
+                    iteration=iteration,
+                    round_number=round_number,
+                    current_highest_bid=current_high_bid,
+                    current_highest_bidder=current_high_bidder,
+                    bids_history=all_bids.copy()
+                )
                 bid_amount = team.get_bid(game_state)
                 
                 bid = Bid(
@@ -163,6 +192,11 @@ class AuctionEngine:
                 )
                 iteration_bids.append(bid)
                 all_bids.append(bid)
+                
+                # Update current highest bid if this bid is higher
+                if bid_amount > current_high_bid:
+                    current_high_bid = bid_amount
+                    current_high_bidder = team.name
             
             # Find highest bid this iteration
             if iteration_bids:
@@ -279,7 +313,7 @@ class AuctionEngine:
             logger.info(f"\n--- Auction {i}/{len(self.items)}: {item.name} ---")
             logger.info(f"Quality: {item.quality}, Required: {item.is_required}")
             
-            result = self._run_single_auction(item)
+            result = self._run_single_auction(item, round_number=i)
             self.auction_history.append(result)
             
             # Remove from remaining items

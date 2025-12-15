@@ -2,6 +2,7 @@
 Data models for the Wolf of Allegro auction game.
 """
 
+import json
 from pydantic import BaseModel, Field
 from typing import Optional
 
@@ -59,6 +60,50 @@ class TeamState(BaseModel):
         return sum(item.quality for item in self.acquired_items)
 
 
+# === JSON Format Models (matching specification) ===
+
+class CurrentHighestBid(BaseModel):
+    """Current highest bid in the auction."""
+    Bid: int = Field(0, description="Highest bid amount so far")
+    TeamName: Optional[str] = Field(None, description="Name of the team with highest bid")
+
+
+class BidHistoryEntry(BaseModel):
+    """Single entry in bid history."""
+    Bid: int
+    TeamName: str
+
+
+class ItemJSON(BaseModel):
+    """Item in JSON format for API."""
+    Name: str
+    Quality: int
+    IsRequired: bool
+
+
+class CurrentRound(BaseModel):
+    """Current round state."""
+    Item: ItemJSON
+    CurrentHighestBid: CurrentHighestBid
+    BidsHistoryForCurrentItem: list[BidHistoryEntry] = Field(default_factory=list)
+    RoundNumber: int
+    RoundIteration: int
+
+
+class TeamJSON(BaseModel):
+    """Team state in JSON format."""
+    Name: str
+    Budget: int
+    Acquired: list[ItemJSON] = Field(default_factory=list)
+
+
+class GameStateJSON(BaseModel):
+    """Game state in JSON format matching the specification."""
+    CurrentRound: CurrentRound
+    YourTeam: TeamJSON
+    OpponentTeams: list[TeamJSON]
+
+
 class GameState(BaseModel):
     """
     Complete game state passed to LLM for decision making.
@@ -69,40 +114,72 @@ class GameState(BaseModel):
     opponent_teams: list[TeamState] = Field(..., description="States of all opponent teams")
     remaining_items: list[Item] = Field(..., description="Items still to be auctioned")
     auction_history: list[AuctionResult] = Field(default_factory=list, description="Results of previous auctions")
-    current_iteration: int = Field(1, ge=1, description="Current iteration for this item (1-10)")
+    current_iteration: int = Field(1, ge=1, description="Current iteration for this item")
+    round_number: int = Field(1, ge=1, description="Current round/item number")
+    current_highest_bid: int = Field(0, ge=0, description="Current highest bid for this item")
+    current_highest_bidder: Optional[str] = Field(None, description="Team name with highest bid")
+    bids_history: list[Bid] = Field(default_factory=list, description="Bid history for current item")
     
-    def to_prompt_context(self) -> str:
-        """Convert game state to a string context for LLM prompt."""
-        lines = [
-            "=== CURRENT AUCTION ===",
-            f"Item: {self.current_item.name}",
-            f"Quality: {self.current_item.quality}",
-            f"Required: {'YES' if self.current_item.is_required else 'NO'}",
-            f"Iteration: {self.current_iteration}/45",
-            "",
-            "=== YOUR TEAM ===",
-            f"Budget: {self.my_team.budget}",
-            f"Required items collected: {self.my_team.required_count}",
-            f"Items owned: {[item.name for item in self.my_team.acquired_items]}",
-            "",
-            "=== OPPONENTS ===",
+    def to_json_format(self) -> GameStateJSON:
+        """Convert to JSON format matching the specification."""
+        # Convert current item
+        current_item_json = ItemJSON(
+            Name=self.current_item.name,
+            Quality=self.current_item.quality,
+            IsRequired=self.current_item.is_required
+        )
+        
+        # Convert bid history
+        bids_history_json = [
+            BidHistoryEntry(Bid=b.amount, TeamName=b.team_name)
+            for b in self.bids_history
         ]
         
-        for opponent in self.opponent_teams:
-            lines.append(f"- {opponent.name}: Budget={opponent.budget}, Required={opponent.required_count}, Items={[item.name for item in opponent.acquired_items]}")
+        # Build CurrentRound
+        current_round = CurrentRound(
+            Item=current_item_json,
+            CurrentHighestBid=CurrentHighestBid(
+                Bid=self.current_highest_bid,
+                TeamName=self.current_highest_bidder
+            ),
+            BidsHistoryForCurrentItem=bids_history_json,
+            RoundNumber=self.round_number,
+            RoundIteration=self.current_iteration
+        )
         
-        lines.extend([
-            "",
-            "=== REMAINING ITEMS ===",
-            f"Total remaining: {len(self.remaining_items)}",
-            f"Required remaining: {sum(1 for i in self.remaining_items if i.is_required)}",
-        ])
+        # Convert YourTeam
+        your_team = TeamJSON(
+            Name=self.my_team.name,
+            Budget=self.my_team.budget,
+            Acquired=[
+                ItemJSON(Name=i.name, Quality=i.quality, IsRequired=i.is_required)
+                for i in self.my_team.acquired_items
+            ]
+        )
         
-        for item in self.remaining_items:
-            req_marker = "[REQ]" if item.is_required else "[OPT]"
-            lines.append(f"  - {item.name} (Q:{item.quality}) {req_marker}")
+        # Convert OpponentTeams
+        opponent_teams = [
+            TeamJSON(
+                Name=t.name,
+                Budget=t.budget,
+                Acquired=[
+                    ItemJSON(Name=i.name, Quality=i.quality, IsRequired=i.is_required)
+                    for i in t.acquired_items
+                ]
+            )
+            for t in self.opponent_teams
+        ]
         
-        return "\n".join(lines)
+        return GameStateJSON(
+            CurrentRound=current_round,
+            YourTeam=your_team,
+            OpponentTeams=opponent_teams
+        )
+    
+    def to_prompt_context(self) -> str:
+        """Convert game state to JSON string for LLM prompt."""
+        json_state = self.to_json_format()
+        return json_state.model_dump_json(indent=2)
 
 
 class GameConfig(BaseModel):

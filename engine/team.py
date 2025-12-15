@@ -2,11 +2,12 @@
 Team agent that uses LLM to make bidding decisions.
 """
 
+import json
 import logging
 from pathlib import Path
 from typing import Optional
 
-from .models import GameState, TeamState
+from .models import GameState, TeamState, Item, ItemJSON
 from .llm_client import LLMClient
 
 logger = logging.getLogger(__name__)
@@ -47,6 +48,30 @@ class Team:
             budget=starting_budget,
             acquired_items=[]
         )
+        
+        # Cache for all_items (set once at game start, doesn't change)
+        self._all_items: list[Item] = []
+        self._all_items_json: str = "[]"
+    
+    def initialize_items(self, all_items: list[Item]) -> None:
+        """
+        Initialize the cached all_items list. Called once at game start.
+        
+        Args:
+            all_items: Complete list of all auction items in the game
+        """
+        self._all_items = all_items
+        # Pre-compute JSON representation for efficiency
+        items_json = [
+            ItemJSON(Name=item.name, Quality=item.quality, IsRequired=item.is_required)
+            for item in all_items
+        ]
+        import json
+        self._all_items_json = json.dumps(
+            [item.model_dump() for item in items_json],
+            indent=2
+        )
+        logger.info(f"Team '{self.name}' initialized with {len(all_items)} items")
     
     def _load_prompt(self) -> str:
         """Load the system prompt from file."""
@@ -72,14 +97,17 @@ class Team:
         Returns:
             Bid amount (0 if LLM fails or returns invalid response)
         """
-        # Convert game state to prompt context
-        context = game_state.to_prompt_context()
+        # Convert game state to JSON format
+        game_state_json = game_state.to_prompt_context()
         
-        # Add instruction for response format
-        user_message = f"""{context}
+        # Build user message with both all_items and game_state
+        user_message = f"""all_items:
+{self._all_items_json}
 
-=== YOUR DECISION ===
-Based on the above state, how much do you bid for this item?
+game_state:
+{game_state_json}
+
+Based on all_items and game_state JSON above, determine your bid.
 Respond with ONLY a single integer (your bid amount). Nothing else."""
         
         # Call LLM
