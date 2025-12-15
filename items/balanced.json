@@ -1,14 +1,17 @@
 [
   { "Name": "Old Coffee Machine", "Quality": 12, "IsRequired": false },
+  { "Name": "The Visionary Compass", "Quality": 90, "IsRequired": true },
   { "Name": "Deprecated Java Library", "Quality": 5, "IsRequired": false },
+  { "Name": "The Interconnected Cognition Matrix", "Quality": 62, "IsRequired": true },
+  { "Name": "The Visionary Compass", "Quality": 60, "IsRequired": true },
+  { "Name": "The Resilience Gyroscope", "Quality": 90, "IsRequired": true },
   { "Name": "Mystery Box (Empty)", "Quality": 50, "IsRequired": false },
   { "Name": "Broken Jenkins Build", "Quality": 1, "IsRequired": false },
   { "Name": "Rubber Duck", "Quality": 100, "IsRequired": false },
 
-  { "Name": "The Visionary Compass", "Quality": 90, "IsRequired": true },
+
   { "Name": "The Visionary Compass", "Quality": 80, "IsRequired": true },
-  { "Name": "The Visionary Compass", "Quality": 70, "IsRequired": true },
-  { "Name": "The Visionary Compass", "Quality": 60, "IsRequired": true },
+  { "Name": "The Visionary Compass", "Quality": 70, "IsRequired": true },  
   { "Name": "The Visionary Compass", "Quality": 50, "IsRequired": true },
   { "Name": "The Visionary Compass", "Quality": 40, "IsRequired": true },
   { "Name": "The Visionary Compass", "Quality": 85, "IsRequired": true },
@@ -18,7 +21,6 @@
   { "Name": "The Interconnected Cognition Matrix", "Quality": 92, "IsRequired": true },
   { "Name": "The Interconnected Cognition Matrix", "Quality": 82, "IsRequired": true },
   { "Name": "The Interconnected Cognition Matrix", "Quality": 72, "IsRequired": true },
-  { "Name": "The Interconnected Cognition Matrix", "Quality": 62, "IsRequired": true },
   { "Name": "The Interconnected Cognition Matrix", "Quality": 52, "IsRequired": true },
   { "Name": "The Interconnected Cognition Matrix", "Quality": 42, "IsRequired": true },
   { "Name": "The Interconnected Cognition Matrix", "Quality": 88, "IsRequired": true },
@@ -31,7 +33,6 @@
   { "Name": "The Resilience Gyroscope", "Quality": 65, "IsRequired": true },
   { "Name": "The Resilience Gyroscope", "Quality": 55, "IsRequired": true },
   { "Name": "The Resilience Gyroscope", "Quality": 45, "IsRequired": true },
-  { "Name": "The Resilience Gyroscope", "Quality": 90, "IsRequired": true },
   { "Name": "The Resilience Gyroscope", "Quality": 80, "IsRequired": true },
   { "Name": "The Resilience Gyroscope", "Quality": 70, "IsRequired": true },
 
