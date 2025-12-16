@@ -130,7 +130,10 @@ class LLMClient:
                 config=types.GenerateContentConfig(
                     system_instruction=system_prompt,
                     temperature=temperature,
-                    max_output_tokens=50
+                    max_output_tokens=50,
+                    automatic_function_calling=types.AutomaticFunctionCallingConfig(
+                        disable=True
+                    )
                 )
             )
             
