@@ -5,6 +5,7 @@ Main entry point with CLI interface.
 
 import argparse
 import csv
+import json
 import logging
 import os
 import sys
@@ -249,38 +250,67 @@ Examples:
     print(f"LLM: {args.llm_model} @ {args.llm_url}")
     print("=" * 60 + "\n")
     
+    # Create session directory with timestamp and parameters
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    scenario_short = args.scenario[:20]  # Limit length
+    teams_short = "_".join(args.teams[:3])[:30]  # Max 3 teams, limit length
+    session_name = f"{timestamp}_{scenario_short}_{teams_short}"
+    session_dir = args.output / session_name
+    session_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Save run configuration
+    config_path = session_dir / "run_config.json"
+    with open(config_path, "w", encoding="utf-8") as f:
+        json.dump({
+            "timestamp": timestamp,
+            "scenario": args.scenario,
+            "teams": args.teams,
+            "starting_budget": starting_budget,
+            "max_iterations": args.max_iterations,
+            "llm_model": args.llm_model,
+            "llm_url": args.llm_url
+        }, f, indent=2)
+    
+    print(f"Session logs: {session_dir}\n")
+    
     # Run game
+    engine = None
     try:
-        with AuctionEngine(config, prompts_dir) as engine:
-            rankings = engine.run()
-            
-            # Export results
-            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            
-            export_detailed_logs(
-                engine.get_detailed_logs(),
-                args.output / f"detailed_logs_{timestamp}.csv"
-            )
-            
-            export_results(
-                rankings,
-                args.output / f"game_results_{timestamp}.csv"
-            )
-            
-            print("\n" + "=" * 60)
-            print("GAME COMPLETE!")
-            print("=" * 60)
-            print(f"\n🏆 WINNER: {rankings[0].team_name}")
-            print(f"   Required items: {rankings[0].required_count}")
-            print(f"   Total quality: {rankings[0].total_quality}")
-            print(f"   Remaining budget: {rankings[0].remaining_budget}")
-            
+        engine = AuctionEngine(config, prompts_dir, session_dir=session_dir)
+        engine.__enter__()
+        
+        rankings = engine.run()
+        
+        # Calculate final rankings
+        final_rankings_path = session_dir / "final_rankings.csv"
+        export_results(rankings, final_rankings_path)
+        
+        print("\n" + "=" * 60)
+        print("GAME COMPLETE!")
+        print("=" * 60)
+        print(f"\n🏆 WINNER: {rankings[0].team_name}")
+        print(f"   Required items: {rankings[0].required_count}")
+        print(f"   Total quality: {rankings[0].total_quality}")
+        print(f"   Remaining budget: {rankings[0].remaining_budget}")
+        print(f"\nAll logs saved to: {session_dir}")
+        
     except KeyboardInterrupt:
-        print("\n\nGame interrupted by user.")
-        sys.exit(1)
+        print("\n\nGame interrupted by user (Ctrl+C)")
+        if engine:
+            print("Saving partial results...")
+            engine.save_session_logs()
+            print(f"Partial logs saved to: {session_dir}")
+        sys.exit(0)
     except Exception as e:
         logging.error(f"Game error: {e}", exc_info=True)
+        if engine:
+            print("Saving partial results...")
+            engine.save_session_logs()
+            print(f"Partial logs saved to: {session_dir}")
         sys.exit(1)
+    finally:
+        if engine:
+            engine.__exit__(None, None, None)
 
 
 if __name__ == "__main__":

@@ -24,16 +24,18 @@ class AuctionEngine:
     Handles the game loop, bidding process, and final ranking.
     """
     
-    def __init__(self, config: GameConfig, prompts_dir: Path):
+    def __init__(self, config: GameConfig, prompts_dir: Path, session_dir: Path | None = None):
         """
         Initialize the auction engine.
         
         Args:
             config: Game configuration
             prompts_dir: Directory containing team prompt files
+            session_dir: Directory for this session's logs (optional)
         """
         self.config = config
         self.prompts_dir = prompts_dir
+        self.session_dir = session_dir
         
         # Initialize LLM client
         self.llm_client = LLMClient(
@@ -184,6 +186,10 @@ class AuctionEngine:
                     current_highest_bidder=iteration_start_high_bidder,
                     bids_history=bids_history_snapshot  # Only winning bids from previous iterations
                 )
+                
+                # Save game_state to file for debugging
+                self._save_game_state(game_state, round_number, iteration)
+                
                 bid_amount = team.get_bid(game_state)
                 
                 bid = Bid(
@@ -297,6 +303,9 @@ class AuctionEngine:
             result = self._run_single_auction(item, round_number=i)
             self.auction_history.append(result)
             
+            # Save incremental logs after each auction
+            self.save_session_logs()
+            
             # Remove from remaining items
             if item in self.remaining_items:
                 self.remaining_items.remove(item)
@@ -382,6 +391,91 @@ class AuctionEngine:
                 })
         
         return logs
+    
+    def save_session_logs(self) -> None:
+        """
+        Save current state of logs to session directory.
+        Called incrementally during game and on interruption.
+        """
+        if not self.session_dir:
+            return
+        
+        import csv
+        from .models import ItemJSON
+        
+        # Save all_items.json (once)
+        all_items_path = self.session_dir / "all_items.json"
+        if not all_items_path.exists():
+            items_json = [
+                ItemJSON(Name=item.name, Quality=item.quality, IsRequired=item.is_required)
+                for item in self.items
+            ]
+            with open(all_items_path, "w", encoding="utf-8") as f:
+                json.dump([item.model_dump() for item in items_json], f, indent=2)
+        
+        # Save detailed logs (all bids)
+        detailed_logs_path = self.session_dir / "detailed_logs.csv"
+        logs = self.get_detailed_logs()
+        if logs:
+            with open(detailed_logs_path, "w", newline="", encoding="utf-8") as f:
+                fieldnames = [
+                    "item_name", "item_quality", "item_required",
+                    "team_name", "bid_amount", "iteration", "won", "winning_bid"
+                ]
+                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerows(logs)
+        
+        # Save auction results summary
+        auction_summary_path = self.session_dir / "auction_results.csv"
+        if self.auction_history:
+            with open(auction_summary_path, "w", newline="", encoding="utf-8") as f:
+                fieldnames = ["item_name", "winner", "winning_bid", "iterations"]
+                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                writer.writeheader()
+                for result in self.auction_history:
+                    writer.writerow({
+                        "item_name": result.item.name,
+                        "winner": result.winning_team or "None",
+                        "winning_bid": result.winning_bid,
+                        "iterations": result.iterations
+                    })
+        
+        # Save current team states
+        team_states_path = self.session_dir / "team_states.json"
+        team_states = []
+        for team in self.teams:
+            state = team.get_state()
+            team_states.append({
+                "name": state.name,
+                "budget": state.budget,
+                "acquired_items": [item.name for item in state.acquired_items]
+            })
+        with open(team_states_path, "w", encoding="utf-8") as f:
+            json.dump(team_states, f, indent=2)
+        
+        logger.debug(f"Session logs saved to: {self.session_dir}")
+    
+    def _save_game_state(self, game_state: GameState, round_number: int, iteration: int) -> None:
+        """
+        Save game_state JSON for debugging.
+        Organized in folders: game_states/round_X/iter_Y/team_NAME.json
+        """
+        if not self.session_dir:
+            return
+        
+        # Create nested folder structure
+        states_dir = self.session_dir / "game_states" / f"round_{round_number}" / f"iter_{iteration}"
+        states_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Filename: team_jj.json
+        filename = f"team_{game_state.my_team.name}.json"
+        filepath = states_dir / filename
+        
+        # Save as formatted JSON
+        game_state_json = game_state.to_prompt_context()
+        with open(filepath, 'w', encoding='utf-8') as f:
+            f.write(game_state_json)
     
     def close(self):
         """Clean up resources."""
