@@ -136,8 +136,8 @@ Examples:
     )
     parser.add_argument(
         "--llm-model",
-        default=os.getenv("LLM_MODEL", "gemini-2.5-flash-preview-05-20"),
-        help="LLM model name"
+        default=os.getenv("LLM_MODEL"),
+        help="LLM model name (from .env: LLM_MODEL)"
     )
     parser.add_argument(
         "--output", "-o",

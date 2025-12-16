@@ -22,7 +22,7 @@ class LLMClient:
     def __init__(
         self,
         provider: str = "google",
-        model: str = "gemini-2.5-flash-preview-05-20",
+        model: str = None,
         base_url: str = "http://localhost:11434/v1",
         timeout: float = 60.0
     ):
@@ -31,12 +31,14 @@ class LLMClient:
         
         Args:
             provider: "google" or "ollama"
-            model: Model name (e.g., "gemini-2.5-flash-preview-05-20" or "qwen2.5:14b")
+            model: Model name (required, from .env LLM_MODEL)
             base_url: Base URL for Ollama API (ignored for Google)
             timeout: Request timeout in seconds
         """
         self.provider = provider.lower()
-        self.model = model
+        self.model = model or os.getenv("LLM_MODEL")
+        if not self.model:
+            raise ValueError("LLM_MODEL not set. Set it in .env file.")
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
         
