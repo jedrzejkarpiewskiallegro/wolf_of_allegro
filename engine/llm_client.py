@@ -42,9 +42,12 @@ class LLMClient:
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
         
-        # Disable httpx debug logging
+        # Disable verbose logging from dependencies
         httpx_logger = logging.getLogger("httpx")
         httpx_logger.setLevel(logging.WARNING)
+        
+        genai_logger = logging.getLogger("google.genai")
+        genai_logger.setLevel(logging.WARNING)
         
         if self.provider == "google":
             self._init_google()
