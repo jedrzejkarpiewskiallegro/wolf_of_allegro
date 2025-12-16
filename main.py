@@ -132,12 +132,12 @@ Examples:
     parser.add_argument(
         "--llm-url",
         default=os.getenv("LLM_BASE_URL", "http://localhost:11434/v1"),
-        help="LLM API base URL"
+        help="LLM API base URL (only for Ollama provider)"
     )
     parser.add_argument(
         "--llm-model",
-        default=os.getenv("LLM_MODEL", "qwen2.5:14b"),
-        help="LLM model name (default: qwen2.5:14b)"
+        default=os.getenv("LLM_MODEL", "gemini-2.5-flash-preview-05-20"),
+        help="LLM model name"
     )
     parser.add_argument(
         "--output", "-o",
@@ -227,10 +227,13 @@ Examples:
             sys.exit(1)
     
     # Build config
+    llm_provider = os.getenv("LLM_PROVIDER", "google")
+    
     config = GameConfig(
         scenario_file=str(scenario_file),
         team_prompts=args.teams,
         max_iterations=args.max_iterations,
+        llm_provider=llm_provider,
         llm_base_url=args.llm_url,
         llm_model=args.llm_model,
         base_budget=int(os.getenv("BASE_BUDGET", "1500")),
@@ -240,6 +243,12 @@ Examples:
     # Calculate dynamic budget
     starting_budget = config.calculate_starting_budget(len(args.teams))
     
+    # Get display name for LLM
+    if llm_provider == "google":
+        llm_display = f"Google Gemini ({args.llm_model})"
+    else:
+        llm_display = f"Ollama ({args.llm_model}) @ {args.llm_url}"
+    
     print("\n" + "=" * 60)
     print("WOLF OF ALLEGRO - AUCTION GAME")
     print("=" * 60)
@@ -247,7 +256,7 @@ Examples:
     print(f"Teams: {', '.join(args.teams)}")
     print(f"Starting Budget: {starting_budget} (1500 + {len(args.teams)} × 200)")
     print(f"Max Iterations: {args.max_iterations}")
-    print(f"LLM: {args.llm_model} @ {args.llm_url}")
+    print(f"LLM: {llm_display}")
     print("=" * 60 + "\n")
     
     # Create session directory with timestamp and parameters

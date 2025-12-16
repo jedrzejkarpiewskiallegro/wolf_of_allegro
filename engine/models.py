@@ -187,8 +187,9 @@ class GameConfig(BaseModel):
     scenario_file: str = Field(..., description="Path to scenario JSON file")
     team_prompts: list[str] = Field(..., description="List of team prompt file names (without .txt)")
     max_iterations: int = Field(45, ge=1, le=100, description="Max iterations per item auction")
-    llm_base_url: str = Field("http://localhost:11434/v1", description="Base URL for LLM API")
-    llm_model: str = Field("qwen2.5:14b", description="LLM model to use")
+    llm_provider: str = Field("google", description="LLM provider: 'google' or 'ollama'")
+    llm_base_url: str = Field("http://localhost:11434/v1", description="Base URL for Ollama API")
+    llm_model: str = Field("gemini-2.5-flash-preview-05-20", description="LLM model to use")
     base_budget: int = Field(1500, ge=100, description="Base starting budget")
     budget_per_team: int = Field(200, ge=0, description="Additional budget per team")
     

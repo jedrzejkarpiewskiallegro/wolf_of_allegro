@@ -39,8 +39,9 @@ class AuctionEngine:
         
         # Initialize LLM client
         self.llm_client = LLMClient(
-            base_url=config.llm_base_url,
-            model=config.llm_model
+            provider=config.llm_provider,
+            model=config.llm_model,
+            base_url=config.llm_base_url
         )
         
         # Load items from scenario
