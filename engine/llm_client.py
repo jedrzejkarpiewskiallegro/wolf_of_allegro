@@ -94,23 +94,45 @@ class LLMClient:
         self,
         system_prompt: str,
         user_message: str,
-        temperature: float = 0.7
+        temperature: float = 0.7,
+        max_retries: int = 7
     ) -> Optional[str]:
         """
-        Send a chat completion request to the LLM.
+        Send a chat completion request to the LLM with retry logic.
         
         Args:
             system_prompt: The system prompt defining agent behavior
             user_message: The user message (game state context)
             temperature: Sampling temperature
+            max_retries: Maximum number of retry attempts
             
         Returns:
-            The assistant's response text, or None if request failed
+            The assistant's response text, or None if all retries failed
         """
-        if self.provider == "google":
-            return self._chat_google(system_prompt, user_message, temperature)
-        elif self.provider == "ollama":
-            return self._chat_ollama(system_prompt, user_message, temperature)
+        for attempt in range(max_retries):
+            try:
+                if self.provider == "google":
+                    response = self._chat_google(system_prompt, user_message, temperature)
+                elif self.provider == "ollama":
+                    response = self._chat_ollama(system_prompt, user_message, temperature)
+                else:
+                    return None
+                
+                # Check if response is valid
+                if response and response.strip():
+                    return response
+                
+                # Empty response - retry
+                if attempt < max_retries - 1:
+                    logger.warning(f"Empty response, retrying... (attempt {attempt + 1}/{max_retries})")
+                    
+            except Exception as e:
+                if attempt < max_retries - 1:
+                    logger.warning(f"Request failed: {e}, retrying... (attempt {attempt + 1}/{max_retries})")
+                else:
+                    logger.error(f"All {max_retries} attempts failed: {e}")
+        
+        logger.error(f"Failed to get valid response after {max_retries} attempts")
         return None
     
     def _chat_google(
