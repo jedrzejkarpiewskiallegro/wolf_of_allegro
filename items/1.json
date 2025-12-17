@@ -1,0 +1,402 @@
+[
+    {
+      "Name": "Slide Deck Generator 3000",
+      "Quality": 86,
+      "IsRequired": false
+    },
+    {
+      "Name": "Visionary Compass",
+      "Quality": 90,
+      "IsRequired": true
+    },
+    {
+      "Name": "Interconnected Cognition Matrix",
+      "Quality": 100,
+      "IsRequired": true
+    },
+    {
+      "Name": "Predictive Insight Array",
+      "Quality": 95,
+      "IsRequired": true
+    },
+    {
+      "Name": "Abstraction Matryoshka",
+      "Quality": 82,
+      "IsRequired": false
+    },
+    {
+      "Name": "Tribal Knowledge Vault",
+      "Quality": 87,
+      "IsRequired": false
+    },
+    {
+      "Name": "Legacy De-Tangler",
+      "Quality": 88,
+      "IsRequired": true
+    },
+    {
+      "Name": "Automated Evolution Engine",
+      "Quality": 95,
+      "IsRequired": true
+    },
+    {
+      "Name": "Legacy De-Tangler",
+      "Quality": 90,
+      "IsRequired": true
+    },
+    {
+      "Name": "Visionary Compass",
+      "Quality": 100,
+      "IsRequired": true
+    },
+    {
+      "Name": "Decision Paralysis Chamber",
+      "Quality": 79,
+      "IsRequired": false
+    },
+    {
+      "Name": "Scope Creep Catalyst",
+      "Quality": 96,
+      "IsRequired": false
+    },
+    {
+      "Name": "Visionary Compass",
+      "Quality": 88,
+      "IsRequired": true
+    },
+    {
+      "Name": "Strategic Blueprint Stabilize",
+      "Quality": 90,
+      "IsRequired": true
+    },
+    {
+      "Name": "Visionary Compass",
+      "Quality": 95,
+      "IsRequired": true
+    },
+    {
+      "Name": "Predictive Insight Array",
+      "Quality": 98,
+      "IsRequired": true
+    },
+    {
+      "Name": "Resilience Gyroscope",
+      "Quality": 90,
+      "IsRequired": true
+    },
+    {
+      "Name": "Strategic Blueprint Stabilize",
+      "Quality": 95,
+      "IsRequired": true
+    },
+    {
+      "Name": "Visionary Compass",
+      "Quality": 92,
+      "IsRequired": true
+    },
+    {
+      "Name": "Catalyst Ignition Spark",
+      "Quality": 100,
+      "IsRequired": true
+    },
+    {
+      "Name": "Cross-Domain Harmonizer",
+      "Quality": 100,
+      "IsRequired": true
+    },
+    {
+      "Name": "Interconnected Cognition Matrix",
+      "Quality": 95,
+      "IsRequired": true
+    },
+    {
+      "Name": "Interconnected Cognition Matrix",
+      "Quality": 88,
+      "IsRequired": true
+    },
+    {
+      "Name": "Strategic Blueprint Stabilize",
+      "Quality": 98,
+      "IsRequired": true
+    },
+    {
+      "Name": "Ambiguous OKR Translator",
+      "Quality": 92,
+      "IsRequired": false
+    },
+    {
+      "Name": "Resilience Gyroscope",
+      "Quality": 92,
+      "IsRequired": true
+    },
+    {
+      "Name": "Overengineering Framework Seed",
+      "Quality": 85,
+      "IsRequired": false
+    },
+    {
+      "Name": "Broken CI Badge",
+      "Quality": 40,
+      "IsRequired": false
+    },
+    {
+      "Name": "Consensus Catalyst",
+      "Quality": 92,
+      "IsRequired": true
+    },
+    {
+      "Name": "Entropy Diffuser (Spec Drift)",
+      "Quality": 84,
+      "IsRequired": false
+    },
+    {
+      "Name": "Context Switch Gravity Well",
+      "Quality": 81,
+      "IsRequired": false
+    },
+    {
+      "Name": "Cross-Domain Harmonizer",
+      "Quality": 90,
+      "IsRequired": true
+    },
+    {
+      "Name": "Legacy De-Tangler",
+      "Quality": 92,
+      "IsRequired": true
+    },
+    {
+      "Name": "Interconnected Cognition Matrix",
+      "Quality": 98,
+      "IsRequired": true
+    },
+    {
+      "Name": "Catalyst Ignition Spark",
+      "Quality": 90,
+      "IsRequired": true
+    },
+    {
+      "Name": "Predictive Insight Array",
+      "Quality": 88,
+      "IsRequired": true
+    },
+    {
+      "Name": "Automated Evolution Engine",
+      "Quality": 98,
+      "IsRequired": true
+    },
+    {
+      "Name": "Resilience Gyroscope",
+      "Quality": 88,
+      "IsRequired": true
+    },
+    {
+      "Name": "Predictive Insight Array",
+      "Quality": 100,
+      "IsRequired": true
+    },
+    {
+      "Name": "Cross-Domain Harmonizer",
+      "Quality": 95,
+      "IsRequired": true
+    },
+    {
+      "Name": "Cross-Domain Harmonizer",
+      "Quality": 88,
+      "IsRequired": true
+    },
+    {
+      "Name": "Consensus Catalyst",
+      "Quality": 95,
+      "IsRequired": true
+    },
+    {
+      "Name": "Consensus Catalyst",
+      "Quality": 88,
+      "IsRequired": true
+    },
+    {
+      "Name": "Interconnected Cognition Matrix",
+      "Quality": 90,
+      "IsRequired": true
+    },
+    {
+      "Name": "Resilience Gyroscope",
+      "Quality": 100,
+      "IsRequired": true
+    },
+    {
+      "Name": "Catalyst Ignition Spark",
+      "Quality": 98,
+      "IsRequired": true
+    },
+    {
+      "Name": "Premature Optimization Kit",
+      "Quality": 62,
+      "IsRequired": false
+    },
+    {
+      "Name": "Critical Path Time Sink (Dud)",
+      "Quality": 89,
+      "IsRequired": false
+    },
+    {
+      "Name": "Predictive Insight Array",
+      "Quality": 92,
+      "IsRequired": true
+    },
+    {
+      "Name": "Legacy Dependency Barnacle",
+      "Quality": 93,
+      "IsRequired": false
+    },
+    {
+      "Name": "Automated Evolution Engine",
+      "Quality": 88,
+      "IsRequired": true
+    },
+    {
+      "Name": "Strategic Blueprint Stabilize",
+      "Quality": 92,
+      "IsRequired": true
+    },
+    {
+      "Name": "Copy-Paste Legacy Blob",
+      "Quality": 50,
+      "IsRequired": false
+    },
+    {
+      "Name": "Interconnected Cognition Matrix",
+      "Quality": 92,
+      "IsRequired": true
+    },
+    {
+      "Name": "Cross-Domain Harmonizer",
+      "Quality": 92,
+      "IsRequired": true
+    },
+    {
+      "Name": "N+1 Query Distributor",
+      "Quality": 88,
+      "IsRequired": false
+    },
+    {
+      "Name": "Consensus Catalyst",
+      "Quality": 98,
+      "IsRequired": true
+    },
+    {
+      "Name": "Automated Evolution Engine",
+      "Quality": 90,
+      "IsRequired": true
+    },
+    {
+      "Name": "Catalyst Ignition Spark",
+      "Quality": 95,
+      "IsRequired": true
+    },
+    {
+      "Name": "Cross-Domain Harmonizer",
+      "Quality": 98,
+      "IsRequired": true
+    },
+    {
+      "Name": "Catalyst Ignition Spark",
+      "Quality": 92,
+      "IsRequired": true
+    },
+    {
+      "Name": "Automated Evolution Engine",
+      "Quality": 92,
+      "IsRequired": true
+    },
+    {
+      "Name": "API Version Hydra",
+      "Quality": 74,
+      "IsRequired": false
+    },
+    {
+      "Name": "Catalyst Ignition Spark",
+      "Quality": 88,
+      "IsRequired": true
+    },
+    {
+      "Name": "Legacy De-Tangler",
+      "Quality": 98,
+      "IsRequired": true
+    },
+    {
+      "Name": "Resilience Gyroscope",
+      "Quality": 95,
+      "IsRequired": true
+    },
+    {
+      "Name": "Flaky Integration Test Probe",
+      "Quality": 80,
+      "IsRequired": false
+    },
+    {
+      "Name": "Visionary Compass",
+      "Quality": 98,
+      "IsRequired": true
+    },
+    {
+      "Name": "Legacy De-Tangler",
+      "Quality": 100,
+      "IsRequired": true
+    },
+    {
+      "Name": "Strategic Blueprint Stabilize",
+      "Quality": 88,
+      "IsRequired": true
+    },
+    {
+      "Name": "Predictive Insight Array",
+      "Quality": 90,
+      "IsRequired": true
+    },
+    {
+      "Name": "Strategic Blueprint Stabilize",
+      "Quality": 100,
+      "IsRequired": true
+    },
+    {
+      "Name": "Async Deadlock Transmitter",
+      "Quality": 76,
+      "IsRequired": false
+    },
+    {
+      "Name": "Resilience Gyroscope",
+      "Quality": 98,
+      "IsRequired": true
+    },
+    {
+      "Name": "Consensus Catalyst",
+      "Quality": 90,
+      "IsRequired": true
+    },
+    {
+      "Name": "Prod Pager Siren",
+      "Quality": 95,
+      "IsRequired": false
+    },
+    {
+      "Name": "Automated Evolution Engine",
+      "Quality": 100,
+      "IsRequired": true
+    },
+    {
+      "Name": "Endless Meeting Invite",
+      "Quality": 100,
+      "IsRequired": false
+    },
+    {
+      "Name": "Consensus Catalyst",
+      "Quality": 100,
+      "IsRequired": true
+    },
+    {
+      "Name": "Legacy De-Tangler",
+      "Quality": 95,
+      "IsRequired": true
+    }
+  ]

@@ -6,7 +6,7 @@
       "type": "debugpy",
       "request": "launch",
       "program": "${workspaceFolder}/main.py",
-      "args": ["--scenario", "balanced_v2", "--max-iterations", "15"],
+      "args": ["--scenario", "1", "--max-iterations", "45"],
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}"
     }

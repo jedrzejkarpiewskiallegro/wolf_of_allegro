@@ -2,3 +2,6 @@
 __pycache__/
 output/
 .env
+old/
+scripts/parsed_items/
+scripts/downloaded_pages/
