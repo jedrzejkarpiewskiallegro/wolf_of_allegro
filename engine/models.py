@@ -50,14 +50,30 @@ class TeamState(BaseModel):
     acquired_items: list[Item] = Field(default_factory=list, description="Items won by this team")
     
     @property
+    def unique_required_items(self) -> dict[str, Item]:
+        """
+        Get unique required items, keeping the one with highest quality for each name.
+        Returns dict mapping item name to best Item.
+        """
+        best_items: dict[str, Item] = {}
+        for item in self.acquired_items:
+            if item.is_required:
+                if item.name not in best_items or item.quality > best_items[item.name].quality:
+                    best_items[item.name] = item
+        return best_items
+    
+    @property
     def required_count(self) -> int:
-        """Number of required items acquired."""
-        return sum(1 for item in self.acquired_items if item.is_required)
+        """Number of UNIQUE required items acquired (by name)."""
+        return len(self.unique_required_items)
     
     @property
     def total_quality(self) -> int:
-        """Sum of quality of all acquired items."""
-        return sum(item.quality for item in self.acquired_items)
+        """
+        Sum of quality of unique required items.
+        For items with same name, takes the highest quality version.
+        """
+        return sum(item.quality for item in self.unique_required_items.values())
 
 
 # === JSON Format Models (matching specification) ===
