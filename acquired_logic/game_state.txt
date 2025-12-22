@@ -1,0 +1,553 @@
+Here is the current state of the game:
+<game_state>
+{
+  "currentRound": {
+    "item": {
+      "name": "Catalyst Ignition Spark",
+      "quality": 98,
+      "isRequired": true
+    },
+    "currentHighestBid": {
+      "bid": 50,
+      "teamName": "Rosomaki"
+    },
+    "bidsHistoryForCurrentItem": {
+      "1": {
+        "bid": 7,
+        "teamName": "Pieczareczki"
+      },
+      "2": {
+        "bid": 9,
+        "teamName": "Rosomaki"
+      },
+      "3": {
+        "bid": 16,
+        "teamName": "Pieczareczki"
+      },
+      "4": {
+        "bid": 26,
+        "teamName": "Sarenki"
+      },
+      "5": {
+        "bid": 27,
+        "teamName": "qwertyuiop"
+      },
+      "6": {
+        "bid": 28,
+        "teamName": "Svanteviz team"
+      },
+      "7": {
+        "bid": 29,
+        "teamName": "GOATS"
+      },
+      "8": {
+        "bid": 30,
+        "teamName": "TDO team"
+      },
+      "9": {
+        "bid": 31,
+        "teamName": "Pieczareczki"
+      },
+      "10": {
+        "bid": 32,
+        "teamName": "Rosomaki"
+      },
+      "11": {
+        "bid": 33,
+        "teamName": "Sarenki"
+      },
+      "12": {
+        "bid": 34,
+        "teamName": "qwertyuiop"
+      },
+      "13": {
+        "bid": 35,
+        "teamName": "Svanteviz team"
+      },
+      "14": {
+        "bid": 36,
+        "teamName": "GOATS"
+      },
+      "15": {
+        "bid": 37,
+        "teamName": "TDO team"
+      },
+      "16": {
+        "bid": 38,
+        "teamName": "Pieczareczki"
+      },
+      "17": {
+        "bid": 39,
+        "teamName": "Rosomaki"
+      },
+      "18": {
+        "bid": 40,
+        "teamName": "Sarenki"
+      },
+      "19": {
+        "bid": 41,
+        "teamName": "qwertyuiop"
+      },
+      "20": {
+        "bid": 42,
+        "teamName": "Svanteviz team"
+      },
+      "21": {
+        "bid": 43,
+        "teamName": "GOATS"
+      },
+      "22": {
+        "bid": 44,
+        "teamName": "TDO team"
+      },
+      "23": {
+        "bid": 45,
+        "teamName": "Pieczareczki"
+      },
+      "24": {
+        "bid": 46,
+        "teamName": "Rosomaki"
+      },
+      "25": {
+        "bid": 47,
+        "teamName": "Sarenki"
+      },
+      "26": {
+        "bid": 48,
+        "teamName": "qwertyuiop"
+      },
+      "27": {
+        "bid": 49,
+        "teamName": "Svanteviz team"
+      },
+      "28": {
+        "bid": 50,
+        "teamName": "GOATS"
+      },
+      "29": {
+        "bid": 51,
+        "teamName": "TDO team"
+      },
+      "30": {
+        "bid": 52,
+        "teamName": "Pieczareczki"
+      },
+      "31": {
+        "bid": 53,
+        "teamName": "Rosomaki"
+      },
+      "32": {
+        "bid": 54,
+        "teamName": "Sarenki"
+      },
+      "33": {
+        "bid": 55,
+        "teamName": "qwertyuiop"
+      },
+      "34": {
+        "bid": 56,
+        "teamName": "Svanteviz team"
+      },
+      "35": {
+        "bid": 57,
+        "teamName": "GOATS"
+      },
+      "36": {
+        "bid": 58,
+        "teamName": "TDO team"
+      },
+      "37": {
+        "bid": 59,
+        "teamName": "Pieczareczki"
+      },
+      "38": {
+        "bid": 60,
+        "teamName": "Rosomaki"
+      },
+      "39": {
+        "bid": 61,
+        "teamName": "Sarenki"
+      },
+      "40": {
+        "bid": 62,
+        "teamName": "qwertyuiop"
+      },
+      "41": {
+        "bid": 63,
+        "teamName": "Svanteviz team"
+      },
+      "42": {
+        "bid": 64,
+        "teamName": "GOATS"
+      },
+      "43": {
+        "bid": 65,
+        "teamName": "TDO team"
+      },
+      "44": {
+        "bid": 50,
+        "teamName": "Rosomaki"
+      }
+    },
+    "roundNumber": 80,
+    "roundIteration": 45
+  },
+  "yourTeam": {
+    "name": "Rosomaki",
+    "budget": 520,
+    "acquired": [
+      {
+        "name": "Catalyst Ignition Spark",
+        "quality": 88,
+        "isRequired": true
+      },
+      {
+        "name": "Legacy De-Tangler",
+        "quality": 88,
+        "isRequired": true
+      },
+      {
+        "name": "Consensus Catalyst",
+        "quality": 90,
+        "isRequired": true
+      },
+      {
+        "name": "Consensus Catalyst",
+        "quality": 98,
+        "isRequired": true
+      },
+      {
+        "name": "Legacy De-Tangler",
+        "quality": 92,
+        "isRequired": true
+      },
+      {
+        "name": "Interconnected Cognition Matrix",
+        "quality": 88,
+        "isRequired": true
+      },
+      {
+        "name": "Legacy De-Tangler",
+        "quality": 95,
+        "isRequired": true
+      },
+      {
+        "name": "Predictive Insight Array",
+        "quality": 100,
+        "isRequired": true
+      },
+      {
+        "name": "Predictive Insight Array",
+        "quality": 88,
+        "isRequired": true
+      },
+      {
+        "name": "Catalyst Ignition Spark",
+        "quality": 90,
+        "isRequired": true
+      },
+      {
+        "name": "Predictive Insight Array",
+        "quality": 90,
+        "isRequired": true
+      },
+      {
+        "name": "Automated Evolution Engine",
+        "quality": 88,
+        "isRequired": true
+      },
+      {
+        "name": "Catalyst Ignition Spark",
+        "quality": 92,
+        "isRequired": true
+      },
+      {
+        "name": "Automated Evolution Engine",
+        "quality": 95,
+        "isRequired": true
+      },
+      {
+        "name": "Legacy De-Tangler",
+        "quality": 90,
+        "isRequired": true
+      }
+    ]
+  },
+  "opponentTeams": [
+    {
+      "name": "Sarenki",
+      "budget": 143,
+      "acquired": [
+        {
+          "name": "Consensus Catalyst",
+          "quality": 92,
+          "isRequired": true
+        },
+        {
+          "name": "Interconnected Cognition Matrix",
+          "quality": 90,
+          "isRequired": true
+        },
+        {
+          "name": "Predictive Insight Array",
+          "quality": 98,
+          "isRequired": true
+        },
+        {
+          "name": "Visionary Compass",
+          "quality": 100,
+          "isRequired": true
+        },
+        {
+          "name": "Resilience Gyroscope",
+          "quality": 88,
+          "isRequired": true
+        },
+        {
+          "name": "Interconnected Cognition Matrix",
+          "quality": 92,
+          "isRequired": true
+        },
+        {
+          "name": "Cross-Domain Harmonizer",
+          "quality": 92,
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "Pieczareczki",
+      "budget": 135,
+      "acquired": [
+        {
+          "name": "Automated Evolution Engine",
+          "quality": 100,
+          "isRequired": true
+        },
+        {
+          "name": "Catalyst Ignition Spark",
+          "quality": 100,
+          "isRequired": true
+        },
+        {
+          "name": "Automated Evolution Engine",
+          "quality": 98,
+          "isRequired": true
+        },
+        {
+          "name": "Strategic Blueprint Stabilize",
+          "quality": 92,
+          "isRequired": true
+        },
+        {
+          "name": "Visionary Compass",
+          "quality": 88,
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "5p4rr0w5",
+      "budget": 15,
+      "acquired": [
+        {
+          "name": "Resilience Gyroscope",
+          "quality": 98,
+          "isRequired": true
+        },
+        {
+          "name": "Visionary Compass",
+          "quality": 92,
+          "isRequired": true
+        },
+        {
+          "name": "Resilience Gyroscope",
+          "quality": 95,
+          "isRequired": true
+        },
+        {
+          "name": "Cross-Domain Harmonizer",
+          "quality": 98,
+          "isRequired": true
+        },
+        {
+          "name": "Legacy De-Tangler",
+          "quality": 98,
+          "isRequired": true
+        },
+        {
+          "name": "Resilience Gyroscope",
+          "quality": 90,
+          "isRequired": true
+        },
+        {
+          "name": "Cross-Domain Harmonizer",
+          "quality": 95,
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "qwertyuiop",
+      "budget": 62,
+      "acquired": [
+        {
+          "name": "Strategic Blueprint Stabilize",
+          "quality": 88,
+          "isRequired": true
+        },
+        {
+          "name": "Resilience Gyroscope",
+          "quality": 92,
+          "isRequired": true
+        },
+        {
+          "name": "Predictive Insight Array",
+          "quality": 92,
+          "isRequired": true
+        },
+        {
+          "name": "Cross-Domain Harmonizer",
+          "quality": 88,
+          "isRequired": true
+        },
+        {
+          "name": "Visionary Compass",
+          "quality": 90,
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "Svanteviz team",
+      "budget": 3,
+      "acquired": [
+        {
+          "name": "Cross-Domain Harmonizer",
+          "quality": 100,
+          "isRequired": true
+        },
+        {
+          "name": "Visionary Compass",
+          "quality": 98,
+          "isRequired": true
+        },
+        {
+          "name": "Interconnected Cognition Matrix",
+          "quality": 98,
+          "isRequired": true
+        },
+        {
+          "name": "Consensus Catalyst",
+          "quality": 88,
+          "isRequired": true
+        },
+        {
+          "name": "Consensus Catalyst",
+          "quality": 95,
+          "isRequired": true
+        },
+        {
+          "name": "Resilience Gyroscope",
+          "quality": 100,
+          "isRequired": true
+        },
+        {
+          "name": "Visionary Compass",
+          "quality": 95,
+          "isRequired": true
+        },
+        {
+          "name": "Consensus Catalyst",
+          "quality": 100,
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "GOATS",
+      "budget": 93,
+      "acquired": [
+        {
+          "name": "Strategic Blueprint Stabilize",
+          "quality": 90,
+          "isRequired": true
+        },
+        {
+          "name": "Catalyst Ignition Spark",
+          "quality": 98,
+          "isRequired": true
+        },
+        {
+          "name": "Strategic Blueprint Stabilize",
+          "quality": 95,
+          "isRequired": true
+        },
+        {
+          "name": "Automated Evolution Engine",
+          "quality": 92,
+          "isRequired": true
+        },
+        {
+          "name": "Interconnected Cognition Matrix",
+          "quality": 100,
+          "isRequired": true
+        },
+        {
+          "name": "Cross-Domain Harmonizer",
+          "quality": 90,
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "TDO team",
+      "budget": 10,
+      "acquired": [
+        {
+          "name": "Interconnected Cognition Matrix",
+          "quality": 95,
+          "isRequired": true
+        },
+        {
+          "name": "Catalyst Ignition Spark",
+          "quality": 95,
+          "isRequired": true
+        },
+        {
+          "name": "Legacy De-Tangler",
+          "quality": 100,
+          "isRequired": true
+        },
+        {
+          "name": "Strategic Blueprint Stabilize",
+          "quality": 100,
+          "isRequired": true
+        },
+        {
+          "name": "Automated Evolution Engine",
+          "quality": 90,
+          "isRequired": true
+        },
+        {
+          "name": "Predictive Insight Array",
+          "quality": 95,
+          "isRequired": true
+        }
+      ]
+    }
+  ]
+}
+</game_state>
+
+Analyze your strategy in the context of the current game state and decide on your bid for the component <game_state.current_round>.
+
+You MUST respond with a single, valid JSON object with two keys:
+1. "bid": An integer representing your bid. A bid of 0 means you pass.
+2. "reasoning": A brief, **one-sentence** string explaining your decision.
+
+Example of a valid response:
+{
+  "bid": 0,
+  "reasoning": "This item is not on my required list, so I pass."
+}

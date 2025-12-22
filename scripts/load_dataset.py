@@ -15,7 +15,7 @@ import json
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Hardcodowany base URL (zmień na właściwy)
-BASE_URL = "https://dev.vabank.fintech.allegrogroup.com/funai/Tournaments/Auction?auctionId=2901549079106932736"
+BASE_URL = "https://dev.vabank.fintech.allegrogroup.com/funai/Tournaments/Live?auctionId=2903028798771796992"
 
 # Zakres rund do pobrania
 START_ROUND = 1
